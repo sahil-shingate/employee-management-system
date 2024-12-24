@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees Management System</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+                <h1 class = "text-center"> Create New Employee </h1>
+                <div class="card-body">
+                    <form th:action="@{/employees}" th:object = "${employee}" method="POST">
+                        <div class="form-group">
+                            <label>Employee First Name</label>
+                            <input
+                                    type="text"
+                                    name="employeeFirstName"
+                                    th:field="*{employeeFirstName}"
+                                    class="form-control"
+                                    placeholder="Enter Employee First Name"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Employee Last Name</label>
+                            <input
+                                    type="text"
+                                    name="employeeLastName"
+                                    th:field="*{employeeLastName}"
+                                    class="form-control"
+                                    placeholder="Enter Employee Last Name"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Employee Email</label>
+                            <input
+                                    type="text"
+                                    name="employeeEmail"
+                                    th:field="*{employeeEmail}"
+                                    class="form-control"
+                                    placeholder="Enter Employee Email"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Employee Password</label>
+                            <input
+                                    type="text"
+                                    name="employeePassword"
+                                    th:field="*{employeePassword}"
+                                    class="form-control"
+                                    placeholder="Enter Employee Password"
+                            />
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
