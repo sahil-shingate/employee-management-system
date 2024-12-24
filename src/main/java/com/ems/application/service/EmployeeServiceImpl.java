@@ -1,6 +1,7 @@
 package com.ems.application.service;
 
 import com.ems.application.entity.Employee;
+import com.ems.application.enums.Role;
 import com.ems.application.repository.EmployeeRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee addEmployee(Employee emp) {
+        emp.setRole(Role.EMPLOYEE);
         employeeRespository.save(emp);
         return emp;
     }
