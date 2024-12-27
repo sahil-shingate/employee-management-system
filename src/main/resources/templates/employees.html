@@ -9,6 +9,7 @@
           crossorigin="anonymous">
 </head>
 <body>
+<div th:replace="~{common/navbar :: navbar}"></div>
     <div class="container">
         <div class="row">
             <h1>All Employees</h1>
@@ -25,6 +26,7 @@
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -33,10 +35,17 @@
                 <td th:text="${employees.employeeFirstName}"></td>
                 <td th:text="${employees.employeeLastName}"></td>
                 <td th:text="${employees.employeeEmail}"></td>
+                <td>
+                    <div class = "row-lg-3">
+                        <a th:href = "@{'/hr/' +  ${employees.employeeId}+ '/delete'}" class = "btn btn-danger btn-sm mb-3">Delete</a>
+                        <a th:href = "@{'/hr/' +  ${employees.employeeId}+ '/edit'}" class = "btn btn-primary btn-sm mb-3">Update</a>
+                    </div>
+                </td>
             </tr>
             </tbody>
 
         </table>
+
         <div class = "row">
             <div class = "col-lg-3">
                 <a th:href = "@{/deleteEmployees}" class = "btn btn-danger btn-sm mb-3"> Delete All Employee</a>

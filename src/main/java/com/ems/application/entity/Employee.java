@@ -1,5 +1,6 @@
 package com.ems.application.entity;
 
+import com.ems.application.enums.Department;
 import com.ems.application.enums.Gender;
 import com.ems.application.enums.Role;
 import jakarta.persistence.*;
@@ -12,8 +13,6 @@ import java.util.UUID;
 @Table(name = "employee")
 public class Employee {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID employeeId;
 
     @Column(name = "first_name")
@@ -41,6 +40,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Id
     @Column(name = "email")
     private String employeeEmail;
 
@@ -49,6 +49,19 @@ public class Employee {
 
     @Column(name = "password")
     private String employeePassword;
+
+    @Column(name = "department")
+    @Enumerated(EnumType.STRING)
+    private Department department;
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
 
     public Gender getGender() {
         return gender;
@@ -93,7 +106,7 @@ public class Employee {
     public Employee(){
     }
 
-    public Employee(UUID employeeId, String employeeFirstName, String employeeLastName, Gender gender, Date dob, Date joiningDate, String phone, Role role, String employeeEmail, String address, String employeePassword) {
+    public Employee(UUID employeeId, String employeeFirstName, String employeeLastName, Gender gender, Date dob, Date joiningDate, String phone, Role role, String employeeEmail, String address, String employeePassword, Department department) {
         this.employeeId = employeeId;
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
@@ -105,6 +118,7 @@ public class Employee {
         this.employeeEmail = employeeEmail;
         this.address = address;
         this.employeePassword = employeePassword;
+        this.department=  department;
     }
 
 

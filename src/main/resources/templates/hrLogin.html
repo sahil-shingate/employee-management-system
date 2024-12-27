@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employees Management System</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid text-center">
+  <div>
+    <img class="img-fluid" th:src="@{/images/ems.png}" />
+  </div>
+  <form th:action="@{/hr/loginSubmit}" method="post" style="max-width: 350px; margin: 0 auto;">
+
+    <div th:if="${param.error}">
+      <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+    </div>
+
+    <div th:if="${param.logout}">
+      <p class="text-warning">You have been logged out.</p>
+    </div>
+
+    <div class="border border-secondary p-3 rounded">
+      <p>Access to Shopme Control Panel</p>
+      <p>
+        <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus/>
+      </p>
+      <p>
+        <input type="password" name="password" class="form-control" placeholder="Password" required />
+      </p>
+      <p>
+        <input type="checkbox" name="remember-me" />&nbsp;Remember Me
+      </p>
+      <p>
+        <input type="submit" value="Login" class="btn btn-primary" />
+      </p>
+    </div>
+  </form>
+</div>
+
+
+</body>
+</html>

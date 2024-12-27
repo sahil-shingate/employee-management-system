@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Employees Management System</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="~{common/navbar :: navbar}"></div>
+<table class="table table-striped">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col">Employee ID</th>
+    <th scope="col">First Name</th>
+    <th scope="col">Last Name</th>
+    <th scope="col">Email</th>
+    <th scope="col">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td th:text="${employee.employeeId}"></td>
+    <td th:text="${employee.employeeFirstName}"></td>
+    <td th:text="${employee.employeeLastName}"></td>
+    <td th:text="${employee.employeeEmail}"></td>
+    <td>
+      <div class = "col-lg-3">
+        <a th:href = "@{'/hr/' + ${employee.employeeId} + '/edit'}" class = "btn btn-danger btn-sm mb-3"> Delete All Employee</a>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+
+</table>
+
+</body>
+</html>
