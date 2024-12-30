@@ -4,6 +4,7 @@ import com.ems.application.enums.Department;
 import com.ems.application.enums.Gender;
 import com.ems.application.enums.Role;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

@@ -5,6 +5,8 @@ import com.ems.application.entity.UserLogin;
 import com.ems.application.enums.Role;
 import com.ems.application.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,28 +31,38 @@ public class EmployeeController {
         return "employees";
     }
 
+    @GetMapping("/access-denied")
+    public String accessDined(){
+        return "access-denied";
+    }
+
     @GetMapping("/addEmployee")
     public String addEmployee(Model model) {
         Employee employee = new Employee();
         model.addAttribute("employee" , employee );
-        return "add_employee";
+        return "employee_new";
     }
 
     @PostMapping("/employees")
     public String saveEmployee(@ModelAttribute("employee") Employee employee){
         employeeService.addEmployee(employee);
-        return "redirect:/employees";
+        return "redirect:/hr/dashborad";
     }
 
     @GetMapping("/deleteEmployees")
     public String deleteEmployees(){
         employeeService.deleteEmployees();
-        return "redirect:/employees";
+        return "redirect:/hr/dashborad";
     }
 
     @GetMapping("/")
     public String redirectHome(){
-        return "redirect:/login";
+        return "redirect:/employee/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(){
+        return "redirect:/employee/login";
     }
 
     @PostMapping("/loginSubmit")
@@ -58,12 +70,13 @@ public class EmployeeController {
         Employee emp = employeeService.loginService(userLogin);
         System.out.println(emp);
         if(emp==null){
+            System.out.println("Empty employee");
             return "redirect:/login";
         }
         return "redirect:/employees/"+emp.getEmployeeId().toString();
     }
 
-    @GetMapping("/login")
+    @GetMapping("/employee/login")
     public String loginPage(Model model){
         UserLogin userLogin = new UserLogin();
         model.addAttribute("userLogin",userLogin);
@@ -78,7 +91,7 @@ public class EmployeeController {
             return "redirect:/login";
         }
         System.out.println(emp.getPhone());
-        return "dashborad";
+        return "employee_profile";
     }
 
 }

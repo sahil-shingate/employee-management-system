@@ -43,7 +43,8 @@ public class HRController {
     public String hrDashborad(Model model){
         List<Employee> employeeList = employeeService.getAllEmployees();
         model.addAttribute("employees" , employeeList );
-        return "employees";
+        return "employee_dashborad";
+        //return "employees";
     }
 
     @GetMapping("/{employeeId}/edit1")
@@ -67,7 +68,7 @@ public class HRController {
     public String addEdit(@PathVariable UUID employeeId, Model model){
         Employee emp = employeeService.getEmployeeById(employeeId);
         model.addAttribute("employee", emp);
-        return "addedit";
+        return "employee_edit";
     }
 
     @PostMapping("/{employeeId}/update")
@@ -75,5 +76,12 @@ public class HRController {
         employeeService.addEmployee(employee);
         return "redirect:/hr/dashborad";
 
+    }
+
+    @GetMapping("/{employeeId}/profile")
+    public String employeeProfile(@PathVariable UUID employeeId, Model model){
+        Employee emp = employeeService.getEmployeeById(employeeId);
+        model.addAttribute("employee", emp);
+        return "employee_profile";
     }
 }

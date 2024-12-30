@@ -2,45 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employees Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees Management System - Login</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+    <style>
+        body {
+            background: #0c66e4;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+        }
+        .login-card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            color: #333;
+        }
+        .login-card img {
+            display: block;
+            max-width: 100px;
+            margin: 0 auto 20px;
+        }
+        .login-card h4 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #0c66e4;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0c66e4;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            text-align: center;
+            width: 100%;
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+        .alert {
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-<div class="container-fluid text-center">
-    <div>
-        <img class="img-fluid" th:src="@{/images/ems.png}" />
-    </div>
-    <form th:action="@{/loginSubmit}" method="post" style="max-width: 350px; margin: 0 auto;">
+<div class="login-card">
+    <img th:src="@{/images/ems.png}" alt="EMS Logo" />
 
-        <div th:if="${param.error}">
-            <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+    <h4>Welcome Back</h4>
+
+    <form th:action="@{/loginSubmit}" method="post">
+        <!-- Error Messages -->
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
         </div>
 
-        <div th:if="${param.logout}">
-            <p class="text-warning">You have been logged out.</p>
+        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+            You have been logged out successfully.
         </div>
 
-        <div class="border border-secondary p-3 rounded">
-            <p>Access to Shopme Control Panel</p>
-            <p>
-                <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus/>
-            </p>
-            <p>
-                <input type="password" name="password" class="form-control" placeholder="Password" required />
-            </p>
-            <p>
-                <input type="submit" value="Login" class="btn btn-success btn-lg btn-block" />
-            </p>
-            <div>
-                <a th:href = "@{/hr/login}" class = "btn btn-primary btn-lg btn-block"> HR Login</a>
-            </div>
+        <!-- Email Input -->
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required autofocus>
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+        </div>
+
+        <div class="form-group mt-3 text-center">
+            <a th:href="@{/addEmployee}" class="btn btn-outline-primary btn-block">Register</a>
+        </div>
+
+        <!-- HR Login Link -->
+        <div class="form-group mt-3 text-center">
+            <a th:href="@{/hr/login}" class="btn btn-outline-primary btn-block">HR Login</a>
         </div>
     </form>
 </div>
 
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2024 Employees Management System. All rights reserved.</p>
+</div>
 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

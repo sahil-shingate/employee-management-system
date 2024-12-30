@@ -13,4 +13,5 @@ public interface EmployeeRespository extends JpaRepository<Employee, String> {
     Employee findEmployeeByEmployeeEmail(String employeeEmail);
     Employee findEmployeeByEmployeeId(UUID employeeId);
     Integer deleteByEmployeeId(UUID employeeId);
+    //Employee updateByEmployeeEmail(Employee employee);
 }

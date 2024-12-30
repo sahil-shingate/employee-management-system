@@ -5,21 +5,46 @@ import com.ems.application.entity.UserLogin;
 import com.ems.application.enums.Role;
 import com.ems.application.repository.EmployeeRespository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService, UserDetailsService {
 
     @Autowired
     private EmployeeRespository employeeRespository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     public EmployeeServiceImpl(EmployeeRespository employeeRespository){
         super();
         this.employeeRespository=employeeRespository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Employee> opt = Optional.ofNullable(employeeRespository.findEmployeeByEmployeeEmail(email));
+        User user = null;
+        if(opt.isEmpty()){
+            throw new UsernameNotFoundException("User with mail:-" + email + " not found");
+        }else{
+            Employee emp = opt.get();
+            String role = emp.getRole().toString();
+            System.out.println("get role" + role);
+            Set<GrantedAuthority> ga = new HashSet<>();
+            ga.add(new SimpleGrantedAuthority(role));
+            user = new User(email, emp.getEmployeePassword(), ga);
+        }
+        return user;
     }
 
     @Override
@@ -42,6 +67,9 @@ public class EmployeeServiceImpl implements EmployeeService{
             emp.setRole(Role.ADMIN);
         }
         emp.setEmployeeId(UUID.randomUUID());
+        String password = emp.getEmployeePassword();
+        String encodedPassword = passwordEncoder.encode(password);
+        emp.setEmployeePassword(encodedPassword);
         employeeRespository.save(emp);
         return emp;
     }
@@ -68,7 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService{
        if(emp==null){
            return null;
        }
-       if(emp.getEmployeeEmail().equals(userLogin.getEmail()) && emp.getEmployeePassword().equals(userLogin.getPassword())){
+       if(emp.getEmployeeEmail().equals(userLogin.getEmail()) && passwordEncoder.matches(userLogin.getPassword(),emp.getEmployeePassword())){
            return emp;
        }
         return null;
