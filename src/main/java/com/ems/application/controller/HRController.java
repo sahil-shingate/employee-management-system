@@ -34,16 +34,16 @@ public class HRController {
             return "redirect:/hr/login";
         }
         if(emp.getRole().equals(Role.HR)){
-            return "redirect:/hr/dashborad";
+            return "redirect:/hr/dashboard";
         }
         return "redirect:/hr/login";
     }
 
-    @GetMapping("/dashborad")
-    public String hrDashborad(Model model){
+    @GetMapping("/dashboard")
+    public String hrDashboard(Model model){
         List<Employee> employeeList = employeeService.getAllEmployees();
         model.addAttribute("employees" , employeeList );
-        return "employees";
+        return "hr_dashboard";
     }
 
     @GetMapping("/{employeeId}/edit1")
@@ -59,7 +59,7 @@ public class HRController {
         Employee emp = employeeService.getEmployeeById(employeeId);
         employeeService.deleteEmployee(employeeId);
         model.addAttribute("employee", emp);
-        return "redirect:/hr/dashborad";
+        return "redirect:/hr/dashboard";
     }
 
 
@@ -73,7 +73,14 @@ public class HRController {
     @PostMapping("/{employeeId}/update")
     public String updateEmployee(@PathVariable UUID employeeId, @ModelAttribute("employee") Employee employee){
         employeeService.addEmployee(employee);
-        return "redirect:/hr/dashborad";
+        return "redirect:/hr/dashboard";
 
+    }
+
+    @GetMapping({"/{employeeId}/profile"})
+    public String employeeProfile(@PathVariable UUID employeeId, Model model) {
+        Employee emp = this.employeeService.getEmployeeById(employeeId);
+        model.addAttribute("employee", emp);
+        return "employee_profile";
     }
 }

@@ -1,0 +1,24 @@
+<!-- src/main/resources/templates/api/attendance/monthly-summary.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Monthly Attendance Summary</title>
+</head>
+<body>
+<h1>Monthly Attendance Summary</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Status</th>
+    <th>Count</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="entry : ${summary}">
+    <td th:text="${entry.key}"></td>
+    <td th:text="${entry.value}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

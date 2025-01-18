@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Set Employee Attendance</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .form-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .form-section h2 {
+      color: #0056b3;
+    }
+    .form-section label {
+      font-weight: bold;
+    }
+    .form-section input, .form-section select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-section button {
+      background-color: #0056b3;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .form-section button:hover {
+      background-color: #004494;
+    }
+    .summary {
+      margin-top: 20px;
+    }
+    .summary ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .summary li {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="text-center mb-4">Employee Attendance</h1>
+
+  <!-- Set Attendance Form -->
+  <div class="form-section">
+    <h2>Set Employee Attendance</h2>
+    <form th:action="@{'/attendance/' + ${employeeId} + '/set'}" method="post">
+      <div class="mb-3">
+        <label for="employeeId" class="form-label">Employee ID</label>
+        <input id="employeeId" name="employeeId" class="form-control" th:value="${employeeId}"  readonly>
+      </div>
+
+      <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" id="date" name="date" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="status" class="form-label">Attendance Status</label>
+        <select id="status" name="status" class="form-select" required>
+          <option th:each="status : ${T(com.ems.application.enums.AttendanceStatus).values()}"
+                  th:value="${status}" th:text="${status}"></option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="remarks" class="form-label">Remarks</label>
+        <input type="text" id="remarks" name="remarks" class="form-control">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <!-- Monthly Summary Form -->
+  <div class="form-section">
+    <h2>Get Monthly Attendance Summary</h2>
+    <form th:action="@{/api/attendance/monthly-summary}" method="get">
+      <div class="mb-3">
+        <label for="employeeId2" class="form-label">Employee ID</label>
+        <input id="employeeId2" name="employeeId2" class="form-control" th:value="${employeeId}" readonly >
+      </div>
+
+      <div class="mb-3">
+        <label for="yearMonth" class="form-label">Month (YYYY-MM)</label>
+        <input type="month" id="yearMonth" name="yearMonth" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Get Summary</button>
+    </form>
+  </div>
+
+  <!-- Monthly Summary Display -->
+  <div th:if="${summary}" class="summary">
+    <h3>Monthly Attendance Summary</h3>
+    <ul>
+      <li th:each="entry : ${summary}" th:text="${entry.key.name() + ': ' + entry.value}"></li>
+    </ul>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

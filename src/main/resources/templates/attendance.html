@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Set Attendance</title>
+</head>
+<body>
+<h1>Set Employee Attendance</h1>
+<form th:action="@{/api/attendance/set}" method="post">
+    <label for="employeeId">Employee ID:</label>
+    <input  id="employeeId" name="employeeId" required>
+    <br>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+    <br>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+        <option th:each="status : ${T(com.ems.application.enums.AttendanceStatus).values()}"
+                th:value="${status}"
+                th:text="${status}">
+        </option>
+    </select>
+    <br>
+
+    <label for="remarks">Remarks:</label>
+    <input type="text" id="remarks" name="remarks">
+    <br>
+
+    <button type="submit">Submit</button>
+</form>
+
+
+<form th:action="@{/api/attendance/monthly-summary}" method="get">
+    <label for="employeeId">Employee ID:</label>
+    <input id="employeeId2" name="employeeId2" required>
+    <br>
+
+    <label for="yearMonth">Month (YYYY-MM):</label>
+    <input type="month" id="yearMonth" name="yearMonth" required>
+    <br>
+
+    <button type="submit">Get Monthly Summary</button>
+</form>
+
+<div th:if="${summary}">
+    <h2>Monthly Attendance Summary</h2>
+    <ul>
+        <li th:each="entry : ${summary}" th:text="${entry.key.name() + ': ' + entry.value}"></li>
+    </ul>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Attendance Calendar</title>
+    <style>
+        body {
+            font-family: "SAP Fiori", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5; /* Light gray background */
+        }
+        .calendar-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .calendar-header {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #0a6ed1; /* SAP Primary Blue */
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Ensures equal column widths */
+        }
+        th, td {
+            width: 14.28%; /* Ensures 7 columns with equal width */
+            height: 120px; /* Fixed height for all cells */
+            text-align: center;
+            vertical-align: top;
+            padding: 5px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            position: relative; /* For overlaying content if needed */
+        }
+        td.empty {
+            background-color: #f5f5f5; /* Light gray for empty cells */
+        }
+        th {
+            background-color: #e5f3ff; /* Light blue for weekdays */
+            color: #0a6ed1;
+            font-weight: bold;
+            padding: 10px;
+        }
+        .weekend {
+            background-color: #ffebee; /* Light red for weekends */
+            color: #d32f2f; /* Dark red */
+        }
+        .day-number {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #000000;
+        }
+        .attendance-buttons {
+            margin-top: 10px;
+        }
+        .attendance-buttons button {
+            margin: 2px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .present-btn {
+            background-color: #4caf50; /* Green */
+            color: #ffffff;
+        }
+        .absent-btn {
+            background-color: #f44336; /* Red */
+            color: #ffffff;
+        }
+        .disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="calendar-container">
+    <div class="calendar-header" th:text="'Attendance for ' + ${month.month} + ' ' + ${month.year}"></div>
+    <table>
+        <thead>
+        <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="week : ${#numbers.sequence(0, 5)}">
+            <td th:each="day : ${#numbers.sequence(1, 7)}"
+                th:with="dayIndex=${(week * 7) + day - firstDayOfWeek},
+                                 dayData=${dayIndex > 0 && dayIndex <= days.size() ? days[dayIndex - 1] : null}"
+                th:classappend="${dayData == null ? 'empty' : (dayData.isWeekend ? 'weekend' : '')}">
+                <div th:if="${dayData != null}">
+                    <span class="day-number" th:text="${dayData.dayNumber}"></span>
+                    <div class="attendance-buttons">
+                        <form th:action="@{/attendance/mark}" method="post" th:if="${!dayData.isWeekend}">
+                            <input type="hidden" name="date" th:value="${dayData.date}">
+                            <button type="submit" class="present-btn" name="status" value="Present">Present</button>
+                            <button type="submit" class="absent-btn" name="status" value="Absent">Absent</button>
+                        </form>
+                        <div th:if="${dayData.isWeekend}" class="disabled">Holiday</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

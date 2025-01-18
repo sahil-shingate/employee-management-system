@@ -1,8 +1,8 @@
 package com.ems.application.controller;
 
+import com.ems.application.entity.AttendanceRecord;
 import com.ems.application.entity.Employee;
 import com.ems.application.entity.UserLogin;
-import com.ems.application.enums.Role;
 import com.ems.application.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -39,7 +44,7 @@ public class EmployeeController {
     @PostMapping("/employees")
     public String saveEmployee(@ModelAttribute("employee") Employee employee){
         employeeService.addEmployee(employee);
-        return "redirect:/employees";
+        return "redirect:/hr/dashboard";
     }
 
     @GetMapping("/deleteEmployees")
@@ -60,7 +65,7 @@ public class EmployeeController {
         if(emp==null){
             return "redirect:/login";
         }
-        return "redirect:/employees/"+emp.getEmployeeId().toString();
+        return "redirect:/"+emp.getEmployeeId().toString() + "/profile";
     }
 
     @GetMapping("/login")
@@ -70,7 +75,7 @@ public class EmployeeController {
         return "login";
     }
 
-    @GetMapping("/employees/{employeeId}")
+    @GetMapping("/{employeeId}/profile")
     public String employeeDashborad(@PathVariable UUID employeeId, Model model){
         Employee emp = employeeService.getEmployeeById(employeeId);
         model.addAttribute("employee", emp);
@@ -78,7 +83,34 @@ public class EmployeeController {
             return "redirect:/login";
         }
         System.out.println(emp.getPhone());
-        return "dashborad";
+        return "employee_profile";
+    }
+
+    @GetMapping("/calendar")
+    public String getAttendanceCalendar(Model model) {
+        YearMonth currentMonth = YearMonth.now(); // Get the current month
+        LocalDate firstDay = currentMonth.atDay(1); // First day of the month
+        int firstDayOfWeek = firstDay.getDayOfWeek().getValue(); // Monday = 1, Sunday = 7
+
+        // Prepare the list of days for the current month
+        List<Map<String, Object>> days = new ArrayList<>();
+        for (int day = 1; day <= currentMonth.lengthOfMonth(); day++) {
+            LocalDate date = currentMonth.atDay(day);
+            boolean isWeekend = date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
+
+            days.add(Map.of(
+                    "date", date,
+                    "dayNumber", day,
+                    "isWeekend", isWeekend
+            ));
+        }
+
+        // Add attributes to the model
+        model.addAttribute("month", currentMonth);
+        model.addAttribute("firstDayOfWeek", firstDayOfWeek); // Pass the first day of the week
+        model.addAttribute("days", days);
+
+        return "attendance-calendar";
     }
 
 }
